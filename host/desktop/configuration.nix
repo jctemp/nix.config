@@ -107,7 +107,6 @@ in
       variant = "";
     };
     desktopManager.gnome.enable = true;
-    videoDrivers = [ "nvidia" ];
   };
 
   programs.dconf.enable = true;
@@ -180,34 +179,8 @@ in
   # ===============================================================
   hardware = {
     enableRedistributableFirmware = true;
-
-    nvidia = {
-      open = true;
-      modesetting.enable = true;
-      nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
-    };
-
-    graphics = {
-      enable = true;
-      extraPackages = with pkgs; [
-        nvidia-vaapi-driver
-      ];
-    };
-
-    bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-      settings = {
-        General = {
-          Enable = "Source,Sink,Media,Socket";
-          Experimental = "true";
-          KernelExperimental = "true";
-        };
-      };
-    };
+    graphics.enable = true;
   };
-
   services.fwupd.enable = true;
 
   # ===============================================================
