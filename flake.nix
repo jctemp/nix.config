@@ -36,17 +36,26 @@
           };
           modules = [
             {
+              host.settings = {
+                name = "desktop";
+                stateVersion = "24.11";
+                timeZone = "Europe/Berlin";
+                defaultLocale = "en_US.UTF-8";
+                extraLocale = "de_DE.UTF-8";
+                keyboardLayout = "us";
+              };
+
+              host.users.primary = "zen";
+
               host.partition = {
                 device = "/dev/nvme0n1";
                 persist.path = "/persist";
               };
-
             }
             ./host/desktop/partitions.nix
             ./host/desktop/facter.nix
             ./host/desktop/testing.nix
             ./host/desktop/configuration.nix
-            ./user/zen/system.nix
           ];
         };
       };

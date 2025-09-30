@@ -2,9 +2,6 @@
 #       USER ZEN SHARED CONFIGURATION
 # ===============================================================
 {
-  # ===============================================================
-  #       PERSONAL INFORMATION
-  # ===============================================================
   userName = "zen";
   userFullName = "Jamie Temple";
   userEmail = "jamie.c.temple@gmail.com";
