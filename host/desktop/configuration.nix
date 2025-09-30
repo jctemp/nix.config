@@ -2,9 +2,9 @@
   config,
   pkgs,
   lib,
-  inputs,
   ...
-}: let
+}:
+let
   # Import shared configuration
   shared = import ./settings.nix;
 
@@ -17,12 +17,8 @@
   defaultLocale = shared.defaultLocale;
   extraLocale = shared.extraLocale;
   keyboardLayout = shared.keyboardLayout;
-
-  # ===============================================================
-  #       HARDWARE CONFIGURATION
-  # ===============================================================
-  kernelPackage = pkgs.linuxPackages;
-in {
+in
+{
   # ===============================================================
   #       SYSTEM BASICS
   # ===============================================================
@@ -38,7 +34,7 @@ in {
       experimental-features = "nix-command flakes";
       auto-optimise-store = true;
       keep-outputs = true;
-      trusted-users = ["@wheel"];
+      trusted-users = [ "@wheel" ];
       connect-timeout = 5;
       log-lines = 25;
       min-free = 128000000;
@@ -47,16 +43,6 @@ in {
   };
 
   nixpkgs.config.allowUnfree = true;
-
-  # ===============================================================
-  #       BOOT CONFIGURATION
-  # ===============================================================
-  boot = {
-    tmp.cleanOnBoot = true;
-    kernelModules = ["tcp_bbr"];
-    kernelPackages = kernelPackage;
-    binfmt.emulatedSystems = ["x86_64-windows" "aarch64-linux"];
-  };
 
   # ===============================================================
   #       LOCALE AND TIME
@@ -90,11 +76,14 @@ in {
   # ===============================================================
   networking = {
     networkmanager.enable = true;
-    nameservers = ["1.1.1.1" "8.8.8.8"];
+    nameservers = [
+      "1.1.1.1"
+      "8.8.8.8"
+    ];
     firewall = {
       enable = true;
-      allowedTCPPorts = [];
-      allowedUDPPorts = [];
+      allowedTCPPorts = [ ];
+      allowedUDPPorts = [ ];
     };
     nftables.enable = true;
   };
@@ -118,7 +107,7 @@ in {
       variant = "";
     };
     desktopManager.gnome.enable = true;
-    videoDrivers = ["nvidia"];
+    videoDrivers = [ "nvidia" ];
   };
 
   programs.dconf.enable = true;
@@ -157,10 +146,13 @@ in {
   services.printing = {
     enable = true;
     openFirewall = true;
-    drivers = with pkgs; [gutenprint epson-escpr2];
+    drivers = with pkgs; [
+      gutenprint
+      epson-escpr2
+    ];
     webInterface = true;
-    listenAddresses = ["localhost:631"];
-    allowFrom = ["localhost"];
+    listenAddresses = [ "localhost:631" ];
+    allowFrom = [ "localhost" ];
     browsing = true;
     defaultShared = false;
   };
@@ -237,7 +229,7 @@ in {
   services.pcscd.enable = true;
   services.udev = {
     enable = true;
-    packages = [pkgs.yubikey-personalization];
+    packages = [ pkgs.yubikey-personalization ];
   };
 
   environment = {
@@ -278,7 +270,7 @@ in {
       enable = true;
       qemu = {
         swtpm.enable = true;
-        ovmf.packages = [pkgs.OVMFFull.fd];
+        ovmf.packages = [ pkgs.OVMFFull.fd ];
       };
     };
   };
