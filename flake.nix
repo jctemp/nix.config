@@ -73,7 +73,7 @@
           };
 
           modules = [
-            ./user/zen/home.nix
+            ./home/users/zen.nix
           ];
         };
       };

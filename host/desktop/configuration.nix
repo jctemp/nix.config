@@ -178,23 +178,9 @@ in
     # ===============================================================
     services.printing = {
       enable = true;
-      openFirewall = true;
       drivers = with pkgs; [
         gutenprint
         epson-escpr2
-      ];
-      webInterface = true;
-      listenAddresses = [ "localhost:631" ];
-      allowFrom = [ "localhost" ];
-      browsing = true;
-      defaultShared = false;
-    };
-
-    hardware.sane = {
-      enable = true;
-      extraBackends = with pkgs; [
-        sane-airscan
-        epkowa
       ];
     };
 
@@ -202,10 +188,6 @@ in
       enable = true;
       nssmdns4 = true;
       openFirewall = true;
-      publish = {
-        enable = true;
-        userServices = true;
-      };
     };
 
     # ===============================================================
