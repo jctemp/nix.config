@@ -55,6 +55,30 @@
             ./host/desktop/default.nix
           ];
         };
+        vps = inputs.nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+          };
+          modules = [
+            {
+              host.settings = {
+                name = "vps";
+                stateVersion = "25.05";
+                timeZone = "Europe/Berlin";
+                defaultLocale = "en_US.UTF-8";
+              };
+
+              host.users.primary = "worker";
+
+              host.partition = {
+                device = "/dev/sda";
+                persist.path = "/persist";
+              };
+            }
+            ./host/vps/default.nix
+          ];
+        };
       };
 
       homeConfigurations = {

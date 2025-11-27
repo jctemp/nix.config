@@ -13,15 +13,6 @@ let
     path = "${pool}/${root}";
     blank = "${path}@blank";
     rollback = ''
-      # During the post device phase the ZFS pools are not yet imported and
-      # to avoid any issues with a rollback we have to manually do it. This
-      # is not done automatically anymore. Some change in a NixOS version
-      # bricked the direct rollback. Also, disko might not export the pools
-      # properly. So we need to pre-import the pools without mounting:
-      #
-      # -N prevents automatic mounting (let the mount phase handle this)
-      # -f forces import even if the pool wasn't cleanly exported (unsure)
-      # 
       zpool import -N -f ${zfs.pool}
       echo "ZFS[code=$?]: import pool ${zfs.pool}"
 
@@ -30,9 +21,6 @@ let
     '';
   };
 
-  # ===============================================================
-  #       ZFS AUXILIARY
-  # ===============================================================
   zpoolOptions = {
     ashift = "12";
     autotrim = "on";
@@ -87,11 +75,9 @@ in
     enable = true;
     hideMounts = true;
     directories = [
-      "/etc/NetworkManager/system-connections"
-      "/var/lib/bluetooth"
-      "/var/lib/nixos"
       "/var/lib/systemd/coredump"
-      "/var/log"
+      "/var/lib/nixos"
+      "/var/lib/docker"
     ];
   };
 
@@ -99,25 +85,14 @@ in
   #       BOOT CONFIGURATION
   # ===============================================================
   boot = {
-    # ZFS rollback for impermanence
     initrd.postDeviceCommands = lib.mkAfter zfs.rollback;
-
     tmp.cleanOnBoot = true;
-
     supportedFilesystems = [
-      "btrfs"
-      "reiserfs"
       "vfat"
-      "f2fs"
-      "xfs"
-      "ntfs"
-      "cifs"
       "zfs"
     ];
   };
 
-  # Disko has no option yet to set this for zfs datasets. We can assume that
-  # the persist path exists. So we are safe to do it manually.
   fileSystems."${cfg.persist.path}".neededForBoot = true;
 
   # ===============================================================
@@ -125,9 +100,6 @@ in
   # ===============================================================
   disko = {
     devices = {
-      # ===============================================================
-      #       DISK PARTITIONING
-      # ===============================================================
       disk.main = {
         imageName = "nixos-disko-root-zfs";
         imageSize = "32G";
@@ -136,22 +108,16 @@ in
         content = {
           type = "gpt";
           partitions = {
-            # ===============================================================
-            #       BIOS BOOT PARTITION
-            # ===============================================================
             boot = {
               label = "BOOT";
               size = cfg.boot.size;
-              type = "EF02"; # BIOS boot partition
+              type = "EF02";
             };
 
-            # ===============================================================
-            #       EFI SYSTEM PARTITION
-            # ===============================================================
             esp = {
               label = "EFI";
               size = cfg.esp.size;
-              type = "EF00"; # EFI system partition
+              type = "EF00";
               content = {
                 type = "filesystem";
                 format = "vfat";
@@ -160,9 +126,6 @@ in
               };
             };
 
-            # ===============================================================
-            #       ENCRYPTED SWAP PARTITION
-            # ===============================================================
             encryptedSwap = {
               size = cfg.swap.size;
               content = {
@@ -172,9 +135,6 @@ in
               };
             };
 
-            # ===============================================================
-            #       ZFS ROOT PARTITION
-            # ===============================================================
             root = {
               size = cfg.root.size;
               content = {
@@ -186,24 +146,17 @@ in
         };
       };
 
-      # ===============================================================
-      #       ZFS POOL CONFIGURATION
-      # ===============================================================
       zpool."${zfs.pool}" = {
         type = "zpool";
         mountpoint = "/";
         options = zpoolOptions;
         rootFsOptions = rootFsOptions;
         datasets = {
-          # ===============================================================
-          #       LOCAL DATASETS (EPHEMERAL)
-          # ===============================================================
           "local" = {
             type = "zfs_fs";
             options.mountpoint = "none";
           };
 
-          # Root filesystem - rolled back on boot to blank snapshot
           "${zfs.root}" = {
             type = "zfs_fs";
             options.mountpoint = "legacy";
@@ -211,29 +164,23 @@ in
             postCreateHook = snapshotScript;
           };
 
-          # Nix store - persistent across reboots
           "local/nix" = {
             type = "zfs_fs";
             options.mountpoint = "legacy";
             mountpoint = "/nix";
           };
 
-          # ===============================================================
-          #       SAFE DATASETS (PERSISTENT)
-          # ===============================================================
           "safe" = {
             type = "zfs_fs";
             options.mountpoint = "none";
           };
 
-          # User home directories
           "safe/home" = {
             type = "zfs_fs";
             options.mountpoint = "legacy";
             mountpoint = "/home";
           };
 
-          # System persistence directory
           "safe/persist" = {
             type = "zfs_fs";
             options.mountpoint = "legacy";
