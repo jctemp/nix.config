@@ -76,6 +76,6 @@
     gpgme
     libfido2
     yubikey-personalization
-    pcsctools
+    pcsc-tools
   ];
 }
