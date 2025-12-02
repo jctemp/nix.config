@@ -370,11 +370,6 @@
     # Fonts
     font-awesome
     dejavu_fonts
-
-    # Utility script for GPG reset
-    (writeShellScriptBin "reset-gpg-yubikey" ''
-      ${gnupg}/bin/gpg-connect-agent "scd serialno" "learn --force" /bye
-    '')
   ];
 
   # ===============================================================

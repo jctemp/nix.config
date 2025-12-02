@@ -17,9 +17,7 @@
     user = {
       name = "Jamie Temple";
       email = "jamie.c.temple@gmail.com";
-      signingKey = "6A89175BB28B8B81";
+      signingKey = "~/.ssh/id_ed25519_github.pub";
     };
-    commit.gpgSign = true;
-    gpg.format = "openpgp";
   };
 }
