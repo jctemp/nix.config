@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -e
+
+echo "Running statix"
+statix check . -i .direnv
+
+echo "Running deadnix"
+deadnix . --exclude .direnv
+
+echo "All checks done"

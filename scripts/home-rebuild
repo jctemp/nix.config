@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -e
+
+HOST=$(hostname)
+USER=$(whoami)
+
+echo "Building home-manager config for $USER@$HOST"
+
+nix build \
+  ".#nixosConfigurations.$HOST.config.home-manager.users.$USER.home.activationPackage" \
+  --out-link /tmp/home-manager-$USER
+
+echo "Activating"
+/tmp/home-manager-$USER/activate
+
+echo "Done"

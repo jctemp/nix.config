@@ -8,6 +8,8 @@ let
   stateVersion = config.host.settings.stateVersion;
   timeZone = config.host.settings.timeZone;
   defaultLocale = config.host.settings.defaultLocale;
+  extraLocale = config.host.settings.extraLocale;
+  keyboardLayout = config.host.settings.keyboardLayout;
 in
 {
   # ===============================================================
@@ -22,7 +24,6 @@ in
     ./security.nix
     ./virtualisation.nix
     ./users.nix
-    ./testing.nix
   ];
 
   # ===============================================================
@@ -34,6 +35,8 @@ in
       stateVersion = lib.mkOption { type = lib.types.str; };
       timeZone = lib.mkOption { type = lib.types.str; };
       defaultLocale = lib.mkOption { type = lib.types.str; };
+      extraLocale = lib.mkOption { type = lib.types.str; };
+      keyboardLayout = lib.mkOption { type = lib.types.str; };
     };
     users = {
       primary = lib.mkOption { type = lib.types.str; };
@@ -57,11 +60,11 @@ in
         type = lib.types.str;
       };
       esp.size = lib.mkOption {
-        default = "512M";
+        default = "2G";
         type = lib.types.str;
       };
       swap.size = lib.mkOption {
-        default = "4G";
+        default = "16G";
         type = lib.types.str;
       };
       root.size = lib.mkOption {
@@ -100,18 +103,36 @@ in
     # ===============================================================
     #       LOCALE AND TIME
     # ===============================================================
-    time.timeZone = timeZone;
+    time = {
+      timeZone = timeZone;
+      hardwareClockInLocalTime = true;
+    };
+
     services.timesyncd.enable = lib.mkDefault true;
 
-    i18n.defaultLocale = defaultLocale;
-    console.keyMap = "us";
+    i18n = {
+      defaultLocale = defaultLocale;
+      extraLocaleSettings = {
+        LC_ADDRESS = extraLocale;
+        LC_IDENTIFICATION = extraLocale;
+        LC_MEASUREMENT = extraLocale;
+        LC_MONETARY = extraLocale;
+        LC_NAME = extraLocale;
+        LC_NUMERIC = extraLocale;
+        LC_PAPER = extraLocale;
+        LC_TELEPHONE = extraLocale;
+        LC_TIME = extraLocale;
+      };
+    };
+
+    console.keyMap = keyboardLayout;
 
     # ===============================================================
     #       DOCUMENTATION
     # ===============================================================
     documentation = {
       enable = true;
-      dev.enable = false;
+      dev.enable = true;
       doc.enable = false;
       info.enable = false;
       man.enable = true;
@@ -127,12 +148,19 @@ in
       completion.enable = true;
       shellAliases = {
         ls = "ls --color=auto";
+        dir = "dir --color=auto";
+        vdir = "vdir --color=auto";
         grep = "grep --color=auto";
+        fgrep = "fgrep --color=auto";
+        egrep = "egrep --color=auto";
         df = "df -h";
         du = "du -h";
         free = "free -h";
+        less = "less -i";
+        mkdir = "mkdir -pv";
+        ping = "ping -c 3";
         ".." = "cd ..";
-        system-rebuild = "sudo nixos-rebuild switch --flake .#vps";
+        system-rebuild = "sudo nixos-rebuild switch --flake .#desktop";
       };
     };
 
@@ -142,10 +170,27 @@ in
     programs.git = {
       enable = true;
       lfs.enable = true;
+      prompt.enable = true;
       config = {
         color.ui = true;
+        grep.lineNumber = true;
         init.defaultBranch = "main";
-        core.editor = "${pkgs.vim}/bin/vim";
+        core = {
+          autocrlf = "input";
+          editor = "${pkgs.vim}/bin/vim";
+        };
+        diff = {
+          mnemonicprefix = true;
+          rename = "copy";
+        };
+        url = {
+          "https://github.com/" = {
+            insteadOf = [
+              "gh:"
+              "github:"
+            ];
+          };
+        };
       };
     };
 
@@ -161,18 +206,19 @@ in
       unzip
       zip
       jq
-      htop
-      tmux
+      pciutils
+      helix
 
-      # Network tools
+      # Network diagnostics
       dnsutils
       inetutils
       mtr
       tcpdump
 
-      # Development tools
-      git
-      rsync
+      # System fonts
+      liberation_ttf
+      corefonts
+      dejavu_fonts
     ];
   };
 }

@@ -17,7 +17,7 @@ in
     inputs.nixos-facter-modules.nixosModules.facter
   ];
 
-  facter.reportPath = "${inputs.self}/host/${config.networking.hostName}/hardware.json";
+  facter.reportPath = "${inputs.self}/hosts/${config.networking.hostName}/hardware.json";
 
   # ===============================================================
   #       HARDWARE SUPPORT

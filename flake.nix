@@ -2,17 +2,13 @@
   description = "Desktop NixOS Configuration";
 
   inputs = {
-    # NIXOS related inputs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
-
     disko = {
       url = "github:nix-community/disko/latest";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
-
-    # USER related inputs
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -51,13 +47,13 @@
                 persist.path = "/persist";
               };
             }
-            ./host/desktop/default.nix
+            ./hosts/desktop/default.nix
 
             inputs.home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.zen = import ./home/users/zen.nix;
+              home-manager.users.zen = import ./home/zen.nix;
               home-manager.extraSpecialArgs = { inherit inputs; };
             }
           ];
@@ -83,7 +79,7 @@
                 persist.path = "/persist";
               };
             }
-            ./host/vps/default.nix
+            ./hosts/vps/default.nix
             inputs.home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -104,45 +100,27 @@
       apps.${system} = {
         home-rebuild = {
           type = "app";
-          program = toString (
-            inputs.nixpkgs.legacyPackages.${system}.writeShellScript "home-rebuild" ''
-              set -e
-        
-              HOST=$(hostname)
-              USER=$(whoami)
-        
-              echo "🔨 Building home-manager config for $USER@$HOST..."
-        
-              ${inputs.nixpkgs.legacyPackages.${system}.nix}/bin/nix build \
-                ".#nixosConfigurations.$HOST.config.home-manager.users.$USER.home.activationPackage" \
-                --out-link /tmp/home-manager-$USER
-        
-              echo "✨ Activating..."
-              /tmp/home-manager-$USER/activate
-        
-              echo "✅ Home configuration activated!"
-            ''
-          );
+          program = "${./scripts/home-rebuild}";
+          meta = {
+            description = "Rebuild home-manager configuration quickly";
+            mainProgram = "home-rebuild";
+          };
         };
         fmt = {
           type = "app";
-          program = toString (inputs.nixpkgs.legacyPackages.${system}.writeShellScript "fmt" ''
-            ${inputs.nixpkgs.legacyPackages.${system}.nixpkgs-fmt}/bin/nixpkgs-fmt .
-          '');
+          program = "${./scripts/fmt}";
+          meta = {
+            description = "Format all Nix files with nixpkgs-fmt";
+            mainProgram = "fmt";
+          };
         };
         check = {
           type = "app";
-          program = toString (
-            inputs.nixpkgs.legacyPackages.${system}.writeShellScript "check" ''
-              echo "🔍 Running statix..."
-              ${inputs.nixpkgs.legacyPackages.${system}.statix}/bin/statix check . -i .direnv
-
-              echo "🧹 Running deadnix..."
-              ${inputs.nixpkgs.legacyPackages.${system}.deadnix}/bin/deadnix . --exclude .direnv
-
-              echo "✅ All checks passed!"
-            ''
-          );
+          program = "${./scripts/check}";
+          meta = {
+            description = "Run statix and deadnix linters";
+            mainProgram = "check";
+          };
         };
       };
 
@@ -162,7 +140,7 @@
             nixd
             nix-diff
             nixfmt-rfc-style
-            nixpkgs-fmt # Add this for your formatter
+            nixpkgs-fmt
             nix-melt
             nix-tree
             statix

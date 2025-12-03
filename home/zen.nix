@@ -1,22 +1,25 @@
 # home/users/zen.nix
 { ... }:
+let
+  user = import ../users/zen.nix;
+in
 {
   imports = [
-    ../modules/ui.nix
-    ../modules/development.nix
+    ./modules/ui.nix
+    ./modules/development.nix
   ];
 
   home = {
-    username = "zen";
-    homeDirectory = "/home/zen";
+    username = user.name;
+    homeDirectory = "/home/${user.name}";
     stateVersion = "24.11";
   };
 
   programs.home-manager.enable = true;
   programs.git.settings = {
     user = {
-      name = "Jamie Temple";
-      email = "jamie.c.temple@gmail.com";
+      name = user.identity;
+      email = user.email;
       signingKey = "~/.ssh/id_ed25519_github.pub";
     };
   };
