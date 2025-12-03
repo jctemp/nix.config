@@ -130,7 +130,7 @@ in
       disk.main = {
         imageName = "nixos-disko-root-zfs";
         imageSize = "32G";
-        device = cfg.device;
+        inherit (cfg) device;
         type = "disk";
         content = {
           type = "gpt";
@@ -140,7 +140,7 @@ in
             # ===============================================================
             boot = {
               label = "BOOT";
-              size = cfg.boot.size;
+              inherit (cfg.boot) size;
               type = "EF02"; # BIOS boot partition
             };
 
@@ -149,7 +149,7 @@ in
             # ===============================================================
             esp = {
               label = "EFI";
-              size = cfg.esp.size;
+              inherit (cfg.esp) size;
               type = "EF00"; # EFI system partition
               content = {
                 type = "filesystem";
@@ -163,7 +163,7 @@ in
             #       ENCRYPTED SWAP PARTITION
             # ===============================================================
             encryptedSwap = {
-              size = cfg.swap.size;
+              inherit (cfg.swap) size;
               content = {
                 type = "swap";
                 randomEncryption = true;
@@ -175,10 +175,10 @@ in
             #       ZFS ROOT PARTITION
             # ===============================================================
             root = {
-              size = cfg.root.size;
+              inherit (cfg.root) size;
               content = {
                 type = "zfs";
-                pool = zfs.pool;
+                inherit (zfs) pool;
               };
             };
           };
@@ -192,7 +192,7 @@ in
         type = "zpool";
         mountpoint = "/";
         options = zpoolOptions;
-        rootFsOptions = rootFsOptions;
+        inherit rootFsOptions;
         datasets = {
           # ===============================================================
           #       LOCAL DATASETS (EPHEMERAL)

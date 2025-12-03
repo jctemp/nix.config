@@ -1,7 +1,7 @@
-{ ... }:
+_:
 {
   # ===============================================================
-  #       NETWORK CONFIGURATION
+  #       NETWORK MANAGER
   # ===============================================================
   networking = {
     networkmanager.enable = true;
@@ -11,7 +11,7 @@
     ];
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 ]; # SSH
+      allowedTCPPorts = [ ];
       allowedUDPPorts = [ ];
     };
     nftables.enable = true;

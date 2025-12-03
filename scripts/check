@@ -2,7 +2,7 @@
 set -e
 
 echo "Running statix"
-statix check . -i .direnv
+statix fix . -i .direnv
 
 echo "Running deadnix"
 deadnix . --exclude .direnv

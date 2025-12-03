@@ -5,11 +5,11 @@
 }:
 let
   hostName = config.host.settings.name;
-  stateVersion = config.host.settings.stateVersion;
-  timeZone = config.host.settings.timeZone;
-  defaultLocale = config.host.settings.defaultLocale;
-  extraLocale = config.host.settings.extraLocale;
-  keyboardLayout = config.host.settings.keyboardLayout;
+  inherit (config.host.settings) stateVersion;
+  inherit (config.host.settings) timeZone;
+  inherit (config.host.settings) defaultLocale;
+  inherit (config.host.settings) extraLocale;
+  inherit (config.host.settings) keyboardLayout;
 in
 {
   # ===============================================================
@@ -19,12 +19,20 @@ in
     ./hardware.nix
     ./boot.nix
     ./storage.nix
-    ./networking.nix
     ./services.nix
     ./security.nix
-    ./virtualisation.nix
     ./users.nix
-    ./testing.nix
+
+    # Reusable modules
+    ../modules/audio.nix
+    ../modules/bluetooth.nix
+    ../modules/docker.nix
+    ../modules/libvirtd.nix
+    ../modules/networking.nix
+    ../modules/nvidia.nix
+    ../modules/printing.nix
+    ../modules/wayland.nix
+    ../modules/testing.nix
   ];
 
   # ===============================================================
@@ -105,14 +113,14 @@ in
     #       LOCALE AND TIME
     # ===============================================================
     time = {
-      timeZone = timeZone;
+      inherit timeZone;
       hardwareClockInLocalTime = true;
     };
 
     services.timesyncd.enable = lib.mkDefault true;
 
     i18n = {
-      defaultLocale = defaultLocale;
+      inherit defaultLocale;
       extraLocaleSettings = {
         LC_ADDRESS = extraLocale;
         LC_IDENTIFICATION = extraLocale;

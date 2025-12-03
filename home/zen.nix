@@ -1,5 +1,5 @@
 # home/users/zen.nix
-{ ... }:
+_:
 let
   user = import ../users/zen.nix;
 in
@@ -19,7 +19,7 @@ in
   programs.git.settings = {
     user = {
       name = user.identity;
-      email = user.email;
+      inherit (user) email;
       signingKey = "~/.ssh/id_ed25519_github.pub";
     };
   };

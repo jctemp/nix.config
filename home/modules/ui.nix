@@ -22,12 +22,6 @@ in
       xdgAutostart = true;
     };
     checkConfig = false;
-    extraOptions = [ "--unsupported-gpu" ];
-    extraSessionCommands = ''
-      export WLR_NO_HARDWARE_CURSORS=1
-      export WLR_RENDERER=vulkan
-    '';
-
     config = {
       modifier = "Mod4";
       terminal = "${pkgs.ghostty}/bin/ghostty";

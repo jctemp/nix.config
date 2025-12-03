@@ -1,14 +1,7 @@
 { inputs
 , config
-, lib
 , ...
 }:
-let
-  hasNvidiaDevice = builtins.any (gpu: (gpu.vendor.hex or "") == "10de") (
-    config.facter.report.hardware.graphics_card or [ ]
-  );
-  hasBluetoothDevice = builtins.length (config.facter.report.hardware.bluetooth or [ ]) > 0;
-in
 {
   # ===============================================================
   #       NIXOS-FACTER INTEGRATION
@@ -28,33 +21,4 @@ in
   };
 
   services.fwupd.enable = true;
-
-  # ===============================================================
-  #       NVIDIA (detected via facter)
-  # ===============================================================
-  services.xserver.videoDrivers = lib.optional hasNvidiaDevice "nvidia";
-
-  hardware.nvidia = lib.mkIf hasNvidiaDevice {
-    open = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-    modesetting.enable = true;
-  };
-
-  hardware.nvidia-container-toolkit.enable = hasNvidiaDevice && config.virtualisation.docker.enable;
-
-  # ===============================================================
-  #       BLUETOOTH (detected via facter)
-  # ===============================================================
-  services.blueman.enable = true;
-  hardware.bluetooth = {
-    enable = hasBluetoothDevice;
-    powerOnBoot = true;
-    settings = {
-      General = {
-        Enable = "Source,Sink,Media,Socket";
-        Experimental = "true";
-        KernelExperimental = "true";
-      };
-    };
-  };
 }

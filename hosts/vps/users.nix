@@ -18,7 +18,7 @@ in
   users.users.${user.name} = {
     isNormalUser = true;
     description = user.identity;
-    hashedPassword = user.hashedPassword;
+    inherit (user) hashedPassword;
     openssh.authorizedKeys.keys = user.authorizedKeys;
     extraGroups = [ "wheel" ] ++ checkGroups [
       "audio"

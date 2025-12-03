@@ -5,9 +5,9 @@
 }:
 let
   hostName = config.host.settings.name;
-  stateVersion = config.host.settings.stateVersion;
-  timeZone = config.host.settings.timeZone;
-  defaultLocale = config.host.settings.defaultLocale;
+  inherit (config.host.settings) stateVersion;
+  inherit (config.host.settings) timeZone;
+  inherit (config.host.settings) defaultLocale;
 in
 {
   # ===============================================================
@@ -20,9 +20,11 @@ in
     ./networking.nix
     ./services.nix
     ./security.nix
-    ./virtualisation.nix
     ./users.nix
-    ./testing.nix
+
+    ../modules/networking.nix
+    ../modules/docker.nix
+    ../modules/testing.nix
   ];
 
   # ===============================================================
