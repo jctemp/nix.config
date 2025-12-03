@@ -1,7 +1,6 @@
-{
-  config,
-  lib,
-  ...
+{ config
+, lib
+, ...
 }:
 {
   virtualisation.vmVariantWithDisko = {
@@ -15,8 +14,14 @@
           host.port = 8888;
           guest.port = 80;
         }
+        {
+          from = "host";
+          host.port = 2222;
+          guest.port = 22;
+        }
       ];
     };
+
     facter.reportPath = lib.mkForce null;
   };
 }

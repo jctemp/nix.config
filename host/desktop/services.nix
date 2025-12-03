@@ -1,7 +1,10 @@
-{ pkgs, ... }:
+{ pkgs
+, lib
+, ...
+}:
 {
   # ===============================================================
-  #       DISPLAY MANAGER
+  #       DISPLAY MANAGER (GREETD)
   # ===============================================================
   services.displayManager.ly = {
     enable = true;
@@ -10,6 +13,12 @@
       hide_borders = true;
       blank_password = true;
     };
+  };
+
+  # Make Sway available system-wide
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
   };
 
   # ===============================================================
@@ -26,7 +35,7 @@
       common = {
         default = [ "gtk" ];
       };
-      sway = {
+      sway = lib.mkForce {
         default = [
           "wlr"
           "gtk"

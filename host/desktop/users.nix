@@ -1,22 +1,23 @@
-{
-  inputs,
-  config,
-  lib,
-  ...
+{ inputs
+, config
+, lib
+, ...
 }:
 {
   # ===============================================================
   #       HOME DIRECTORY SETUP
   # ===============================================================
-  systemd.tmpfiles.rules = lib.foldl (
-    acc: elem:
-    acc
-    ++ [
-      "d /home/${elem} 0755 ${elem} users -"
-      "d /home/${elem}/.ssh 0750 ${elem} users -"
-      "d /home/${elem}/.ssh/sockets 0750 ${elem} users -"
-    ]
-  ) [ ] ([ config.host.users.primary ] ++ config.host.users.collection ++ config.host.users.admins);
+  systemd.tmpfiles.rules = lib.foldl
+    (
+      acc: elem:
+        acc
+        ++ [
+          "d /home/${elem} 0755 ${elem} users -"
+          "d /home/${elem}/.ssh 0750 ${elem} users -"
+          "d /home/${elem}/.ssh/sockets 0750 ${elem} users -"
+        ]
+    ) [ ]
+    ([ config.host.users.primary ] ++ config.host.users.collection ++ config.host.users.admins);
 
   # ===============================================================
   #       USER DEFINITIONS
@@ -30,7 +31,8 @@
           user = lib.throwIfNot (lib.pathExists "${inputs.self}/user/${name}") ''
             The user '${name}' is not defined.
             Please add a definition for the user under the <flake>/user/<username>.
-          '' name;
+          ''
+            name;
           settings = import "${inputs.self}/user/${name}/settings.nix";
           checkGroups = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
         in

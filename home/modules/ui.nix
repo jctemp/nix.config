@@ -1,16 +1,21 @@
 # home/modules/ui.nix
-{
-  pkgs,
-  lib,
-  ...
+{ pkgs
+, lib
+, osConfig
+, ...
 }:
+let
+  hasWayland = osConfig.programs.sway.enable or false;
+  hasDocker = osConfig.virtualisation.docker.enable or false;
+
+in
 {
   imports = [ ./cli.nix ];
 
   # ===============================================================
   #       WAYLAND COMPOSITOR (SWAY)
   # ===============================================================
-  wayland.windowManager.sway = {
+  wayland.windowManager.sway = lib.mkIf hasWayland {
     enable = true;
     systemd = {
       enable = true;
@@ -268,16 +273,6 @@
     };
   };
 
-  programs.zellij = {
-    enable = true;
-    enableBashIntegration = true;
-    settings = {
-      simplified_ui = true;
-      show_startup_tips = false;
-      copy_command = "${pkgs.xclip}/bin/xclip -sel clipboard";
-    };
-  };
-
   # ===============================================================
   #       GTK
   # ===============================================================
@@ -307,70 +302,77 @@
   # ===============================================================
   #       GUI APPLICATIONS
   # ===============================================================
-  home.packages = with pkgs; [
-    # Wayland utilities
-    wl-clipboard
-    grim
-    slurp
-    swayidle
-    wdisplays
+  home.packages =
+    with pkgs;
+    [
+      # Network
+      networkmanagerapplet
+      polkit_gnome
 
-    # Network
-    networkmanagerapplet
-    polkit_gnome
+      # Audio
+      pavucontrol
+      pulsemixer
+      easyeffects
+      helvum
 
-    # Audio
-    pavucontrol
-    pulsemixer
-    easyeffects
-    helvum
+      # Bluetooth
+      bluez
+      blueberry
+      bluez-tools
+      blueman
 
-    # Bluetooth
-    bluez
-    blueberry
-    bluez-tools
-    blueman
+      # Media applications
+      vlc
+      spotify
+      audacity
+      obs-studio
+      gimp
+      # blender_4_5
+      ffmpeg
+      imagemagick
+      exiftool
+      nautilus
+      lmstudio
 
-    # Media applications
-    vlc
-    spotify
-    audacity
-    obs-studio
-    gimp
-    blender_4_5
-    ffmpeg
-    imagemagick
-    exiftool
-    nautilus
-    lmstudio
+      # Productivity applications
+      libreoffice
+      zotero
+      keepassxc
 
-    # Productivity applications
-    libreoffice
-    zotero
-    keepassxc
+      # Web browsers
+      google-chrome
 
-    # Web browsers
-    google-chrome
-    firefox
+      # Printing and scanning
+      system-config-printer
+      evince
+      sane-frontends
+      simple-scan
 
-    # Printing and scanning
-    system-config-printer
-    evince
-    sane-frontends
-    simple-scan
+      # Development
+      vscode
+      nmap
+      netcat
+      iperf3
+      dig
+      wireshark
 
-    # Development
-    vscode
-    nmap
-    netcat
-    iperf3
-    dig
-    wireshark
+      # Fonts
+      font-awesome
+      dejavu_fonts
+    ]
+    ++ lib.optionals hasWayland [
 
-    # Fonts
-    font-awesome
-    dejavu_fonts
-  ];
+      # Wayland utilities
+      wl-clipboard
+      grim
+      slurp
+      swayidle
+      wdisplays
+    ]
+    ++ lib.optionals hasDocker [
+      dive
+      lazydocker
+    ];
 
   # ===============================================================
   #       VSCODE

@@ -1,8 +1,7 @@
-{
-  inputs,
-  config,
-  lib,
-  ...
+{ inputs
+, config
+, lib
+, ...
 }:
 let
   hasNvidiaDevice = builtins.any (gpu: (gpu.vendor.hex or "") == "10de") (
@@ -38,6 +37,7 @@ in
   hardware.nvidia = lib.mkIf hasNvidiaDevice {
     open = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
+    modesetting.enable = true;
   };
 
   hardware.nvidia-container-toolkit.enable = hasNvidiaDevice && config.virtualisation.docker.enable;

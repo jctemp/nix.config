@@ -84,7 +84,7 @@
   # ===============================================================
   programs.zellij = {
     enable = true;
-    enableBashIntegration = true;
+    enableBashIntegration = false;
     settings = {
       simplified_ui = true;
       show_startup_tips = false;
