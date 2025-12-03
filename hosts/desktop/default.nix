@@ -24,6 +24,7 @@ in
     ./security.nix
     ./virtualisation.nix
     ./users.nix
+    ./testing.nix
   ];
 
   # ===============================================================
