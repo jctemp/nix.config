@@ -14,4 +14,5 @@ in
   };
 
   hardware.nvidia-container-toolkit.enable = hasNvidiaDevice && config.virtualisation.docker.enable;
+  hardware.nvidia-container-toolkit.mount-nvidia-executables = true;
 }
