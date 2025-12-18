@@ -1,4 +1,4 @@
-_:
+{ pkgs, ... }:
 {
   programs.helix = {
     enable = true;
@@ -36,7 +36,27 @@ _:
           follow-symlinks = true;
           git-ignore = true;
         };
+
+        statusline = {
+          left = [ "mode" "spinner" "file-name" "file-modification-indicator" ];
+          right = [ "diagnostics" "selections" "position" "file-encoding" ];
+        };
+
+        lsp = {
+          display-messages = true;
+          display-inlay-hints = true;
+        };
       };
+    };
+
+    languages = {
+      language = [
+        {
+          name = "nix";
+          auto-format = true;
+          formatter.command = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt";
+        }
+      ];
     };
   };
 

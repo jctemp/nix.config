@@ -19,8 +19,42 @@ in
       "x-scheme-handler/https" = "google-chrome.desktop";
       "x-scheme-handler/about" = "google-chrome.desktop";
       "x-scheme-handler/unknown" = "google-chrome.desktop";
+
+      "inode/directory" = "thunar.desktop";
+      "application/x-directory" = "thunar.desktop";
     };
   };
+
+  xdg.configFile."Thunar/uca.xml".text = lib.mkIf hasWayland ''
+    <?xml version="1.0" encoding="UTF-8"?>
+    <actions>
+      <action>
+        <icon>utilities-terminal</icon>
+        <name>Open Terminal Here</name>
+        <command>ghostty --working-directory %f</command>
+        <description>Open terminal in current directory</description>
+        <patterns>*</patterns>
+        <startup-notify/>
+        <directories/>
+      </action>
+      <action>
+        <icon>text-editor</icon>
+        <name>Edit as Root</name>
+        <command>sudo helix %f</command>
+        <description>Edit file with root privileges</description>
+        <patterns>*</patterns>
+        <text-files/>
+      </action>
+      <action>
+        <icon>emblem-symbolic-link</icon>
+        <name>Create Link</name>
+        <command>ln -s %f %f.link</command>
+        <description>Create symbolic link</description>
+        <patterns>*</patterns>
+        <other-files/>
+      </action>
+    </actions>
+  '';
 
   home.packages = with pkgs; [
     # CLI tools (no GUI needed)
@@ -31,6 +65,12 @@ in
     netcat
     iperf3
     dig
+
+    # Archive formats
+    zip
+    unzip
+    p7zip
+    unrar
 
     # Spell checking
     aspell
@@ -48,7 +88,17 @@ in
     blueberry
     bluez-tools
     blueman
-    nautilus
+
+    xfce.thunar
+    xfce.thunar-volman
+    xfce.thunar-archive-plugin
+    xfce.thunar-media-tags-plugin
+    xfce.tumbler
+
+    file-roller
+    ffmpegthumbnailer
+    poppler-utils
+
     vlc
     spotify
     audacity

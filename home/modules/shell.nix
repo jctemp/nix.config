@@ -4,8 +4,9 @@
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      system-rebuild = "sudo nixos-rebuild switch --flake .#desktop";
-      home-rebuild = "home-manager switch --flake .#zen";
+      sysinfo = "inxi -Fxxxz";
+      nixgen = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
+      nixclean = "sudo nix-collect-garbage -d && nix-collect-garbage -d";
       ls = "ls --color=auto";
       grep = "grep --color=auto";
       fgrep = "fgrep --color=auto";
@@ -91,6 +92,9 @@
     bat
     eza
     zoxide
+    inxi
+    btop
+    ncdu
   ];
 
   home.sessionVariables = {
