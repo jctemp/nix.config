@@ -31,4 +31,10 @@ in
       "kvm"
     ];
   };
+
+  # Configure root with same password and SSH keys
+  users.users.root = {
+    inherit (user) hashedPassword;
+    openssh.authorizedKeys.keys = user.authorizedKeys;
+  };
 }

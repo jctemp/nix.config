@@ -31,4 +31,9 @@ in
       "kvm"
     ];
   };
+
+  users.users.root = {
+    inherit (user) hashedPassword;
+    openssh.authorizedKeys.keys = user.authorizedKeys;
+  };
 }

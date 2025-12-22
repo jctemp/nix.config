@@ -40,7 +40,7 @@
     maxCacheTtl = 7200;
     maxCacheTtlSsh = 7200;
 
-    pinentryPackage = pkgs.pinentry-curses;
+    pinentry.package = pkgs.pinentry-curses;
 
     extraConfig = ''
       # Allow extra socket for remote forwarding
@@ -54,9 +54,4 @@
   home.packages = with pkgs; [
     paperkey
   ];
-
-  # SSH configuration for GPG agent
-  home.sessionVariables = {
-    SSH_AUTH_SOCK = "\${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh";
-  };
 }

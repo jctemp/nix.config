@@ -17,7 +17,6 @@ in
     ./hardware.nix
     ./boot.nix
     ./storage.nix
-    ./networking.nix
     ./services.nix
     ./security.nix
     ./users.nix
