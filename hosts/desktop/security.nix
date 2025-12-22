@@ -14,25 +14,20 @@
   };
 
   # ===============================================================
-  #       SMARTCARD
-  # ===============================================================
-  services.pcscd.enable = true;
-  hardware.nitrokey.enable = true;
-
-  # ===============================================================
   #       PACKAGES
   # ===============================================================
-  environment.systemPackages = with pkgs; [
-    swaylock-effects
+  environment.systemPackages =
+    let
+      pynitrokey-with-pcsc = pkgs.python3Packages.pynitrokey.overridePythonAttrs (old: {
+        dependencies = old.dependencies ++ old.optional-dependencies.pcsc;
+      });
 
-    gnupg
-    pinentry-curses
-    libfido2
+    in
 
-    nitrokey-app2
-    pynitrokey
-
-    age
-    sops
-  ];
+    with pkgs; [
+      gnupg
+      pinentry-curses
+      age
+      sops
+    ];
 }

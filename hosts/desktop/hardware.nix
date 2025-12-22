@@ -1,5 +1,6 @@
 { inputs
 , config
+, pkgs
 , ...
 }:
 {
@@ -18,7 +19,23 @@
   hardware = {
     enableRedistributableFirmware = true;
     graphics.enable = true;
+    nitrokey.enable = true;
   };
 
-  services.fwupd.enable = true;
+  services = {
+    fwupd.enable = true;
+    pcscd.enable = true;
+  };
+
+  environment.systemPackages =
+    let
+      pynitrokey-with-pcsc = pkgs.python3Packages.pynitrokey.overridePythonAttrs (old: {
+        dependencies = old.dependencies ++ old.optional-dependencies.pcsc;
+      });
+    in
+    with pkgs; [
+      swaylock-effects
+      libfido2
+      pynitrokey-with-pcsc
+    ];
 }
