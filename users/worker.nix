@@ -1,10 +1,10 @@
-# users/worker.nix - NEW FORMAT
 {
   name = "worker";
   identity = "Worker";
   email = "worker@example.com";
   hashedPassword = "$y$j9T$P1wQbX0khrRAvpumtW12D1$pOke0FO.seDfeJoViRwXWkvH32ZuNJEE.9fAoLPCxN7";
   authorizedKeys = [
-    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDaKUw7XbzrROfMEWUjohK01FzVNZrMBWtuLvDPCz323H6i9+9Q+KqkcVGyVoaUED8v3X/YGQaPqieugJjAOtech64tbeuYi00iFSaV+sJhJ7/bY+tg1QX46GwieKy4myhvTHFnwDTP6FG73MPomVjErbNOHRb8NueNFYEmGD+XJBrjFFFONTI1/EEdT+TNVG8rg75tYowgCGaKUmUE+rpzi2EcuVbBYCaHFcBvSrwCxf3NwtnxTZJ01z378vzYgKV+atbidsujG/WYSANWiH6h0JPbnbtIRnMVoPibGGVZZMXhasWdC4TuGQMLlPzx9it3n6VthOAIJMMQG3ImBg43lYSQcyv07vWtrfU3DT3QC6DvudLPDDsqRz3R9lVn2nRlc5BRVXgJnolJjensK53a3drtAapCLlCW4njDi/AYcHB2xIFzsgr88gO+fODek0v6v6OG7q9L1EpVY4+UbNbQW8zc/SxQNZ3t2zV1v5aCU+q6G0hj3JPQoCDJCNHsDfrtrP46HO9XUOErK9FYd1Ry4ClMmhK/4fewj8BrGSG8cbL8rfFSVqQQx8s7Bera+z+2yHmLgxvC9a5y3MbeWvRB3PP2gEzc5kku0eDyhBX8DZRm5facML/eHGqZcVwMqeyHph+OxplpbyBpW+Y8ehYpyDPHaMLw85EzvhA/tB80SQ== openpgp:0x4C957822"
+    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIIiImc+LXGvruFAV4DrQs7c29GlFLqKYeLaCFGzUpw8lAAAADHNzaDpuaXRyb2tleQ== ssh:nitrokey"
+    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIKdQ+zIcF7cGgO+D7gsepRxBwp37TNCSErRVzFPDVBLkAAAADHNzaDpuaXRyb2tleQ== ssh:nitrokey"
   ];
 }

@@ -1,6 +1,9 @@
 { pkgs, ... }:
 {
-  programs.git.enable = true;
+  programs.git = {
+    enable = true;
+    signing.format = "openpgp";
+  };
 
   programs.gitui = {
     enable = true;

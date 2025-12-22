@@ -20,10 +20,16 @@ in
   };
 
   programs.home-manager.enable = true;
-  programs.git.settings = {
-    user = {
-      name = user.identity;
-      inherit (user) email;
+  programs.git = {
+    settings = {
+      user = {
+        name = user.identity;
+        inherit (user) email;
+      };
+    };
+    signing = {
+      key = "0x2A76355E27FF9075";
+      signByDefault = true;
     };
   };
 }
