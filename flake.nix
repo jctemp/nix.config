@@ -3,18 +3,13 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     disko = {
       url = "github:nix-community/disko/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
-    home-manager = {
-
-      url = "github:nix-community/home-manager/master";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
+    home-manager.url = "github:nix-community/home-manager/master";
 
     blender-bin.url = "github:edolstra/nix-warez?dir=blender";
   };
@@ -89,19 +84,15 @@
                 persist.path = "/persist";
               };
             }
+
             ./hosts/vps/default.nix
+
             inputs.home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = false;
               home-manager.useUserPackages = true;
+              home-manager.users.worker = import ./home/worker.nix;
               home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.worker = {
-                imports = [ ./home/modules/cli.nix ];
-                home.username = "worker";
-                home.homeDirectory = "/home/worker";
-                home.stateVersion = "25.05";
-                programs.home-manager.enable = true;
-              };
             }
           ];
         };
