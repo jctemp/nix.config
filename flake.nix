@@ -3,15 +3,17 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     disko = {
-      url = "github:nix-community/disko/latest";
+      url = "github:nix-community/disko/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
-      inputs.nixpkgs.follows = "nixpkgs";
+
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     blender-bin.url = "github:edolstra/nix-warez?dir=blender";
@@ -47,11 +49,19 @@
                 persist.path = "/persist";
               };
             }
+
             ./hosts/desktop/default.nix
+
+            ({ lib, ... }: {
+              virtualisation.vmVariantWithDisko = {
+                facter.reportPath = lib.mkForce null;
+                virtualisation.fileSystems."/persist".neededForBoot = true;
+              };
+            })
 
             inputs.home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
+              home-manager.useGlobalPkgs = false;
               home-manager.useUserPackages = true;
               home-manager.users.zen = import ./home/zen.nix;
               home-manager.extraSpecialArgs = { inherit inputs; };
@@ -82,7 +92,7 @@
             ./hosts/vps/default.nix
             inputs.home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
+              home-manager.useGlobalPkgs = false;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = { inherit inputs; };
               home-manager.users.worker = {
@@ -148,13 +158,7 @@
           ];
 
           shellHook = ''
-            echo "🚀 NixOS Configuration Development Environment"
-            echo ""
-            echo "Available commands:"
-            echo "  sudo nixos-rebuild switch --flake .#desktop  - Full system rebuild"
-            echo "  nix run .#home-rebuild                       - Fast home rebuild"
-            echo "  nix run .#fmt                                - Format all files"
-            echo "  nix run .#check                              - Run all checks"
+            echo "NixOS Configuration Development Environment"
             echo ""
           '';
         };
