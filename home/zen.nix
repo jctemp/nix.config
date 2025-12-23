@@ -1,7 +1,6 @@
-# home/users/zen.nix
-_:
+path:
 let
-  user = import ../users/zen.nix;
+  user = import path;
 in
 {
   imports = [
@@ -17,6 +16,7 @@ in
     username = user.name;
     homeDirectory = "/home/${user.name}";
     stateVersion = "24.11";
+    enableNixpkgsReleaseCheck = false;
   };
 
   nixpkgs.config.allowUnfree = true;

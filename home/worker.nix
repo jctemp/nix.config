@@ -1,6 +1,6 @@
-_:
+path:
 let
-  user = import ../users/worker.nix;
+  user = import path;
 in
 {
   imports = [
@@ -14,6 +14,7 @@ in
     username = user.name;
     homeDirectory = "/home/${user.name}";
     stateVersion = "25.11";
+    enableNixpkgsReleaseCheck = false;
   };
 
   nixpkgs.config.allowUnfree = true;

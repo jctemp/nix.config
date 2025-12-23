@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+
     disko = {
       url = "github:nix-community/disko/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -58,7 +59,7 @@
             {
               home-manager.useGlobalPkgs = false;
               home-manager.useUserPackages = true;
-              home-manager.users.zen = import ./home/zen.nix;
+              home-manager.users.zen = import ./home/zen.nix ./users/zen.nix;
               home-manager.extraSpecialArgs = { inherit inputs; };
             }
           ];
@@ -91,7 +92,7 @@
             {
               home-manager.useGlobalPkgs = false;
               home-manager.useUserPackages = true;
-              home-manager.users.worker = import ./home/worker.nix;
+              home-manager.users.worker = import ./home/worker.nix ./users/worker.nix;
               home-manager.extraSpecialArgs = { inherit inputs; };
             }
           ];

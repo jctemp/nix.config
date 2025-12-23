@@ -1,7 +1,6 @@
-{ config, ... }:
+{ inputs, config, ... }:
 let
-  # Import user identity from new location
-  user = import ../../users/worker.nix;
+  user = import "${inputs.self}/users/${config.host.users.primary}.nix";
 
   checkGroups = groups:
     builtins.filter (g: builtins.hasAttr g config.users.groups) groups;
@@ -32,6 +31,7 @@ in
     ];
   };
 
+  # Configure root with same password and SSH keys
   users.users.root = {
     inherit (user) hashedPassword;
     openssh.authorizedKeys.keys = user.authorizedKeys;

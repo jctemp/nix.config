@@ -21,7 +21,6 @@ in
     ./storage.nix
     ./services.nix
     ./security.nix
-    ./users.nix
 
     # Reusable modules
     ../modules/audio.nix
@@ -33,6 +32,7 @@ in
     ../modules/printing.nix
     ../modules/wayland.nix
     ../modules/testing.nix
+    ../modules/users.nix
   ];
 
   # ===============================================================

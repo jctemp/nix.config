@@ -19,11 +19,11 @@ in
     ./storage.nix
     ./services.nix
     ./security.nix
-    ./users.nix
 
     ../modules/networking.nix
     ../modules/docker.nix
     ../modules/testing.nix
+    ../modules/users.nix
   ];
 
   # ===============================================================
