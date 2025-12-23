@@ -13,6 +13,10 @@
     home-manager.url = "github:nix-community/home-manager/master";
 
     blender-bin.url = "github:edolstra/nix-warez?dir=blender";
+    oisd = {
+      url = "https://big.oisd.nl/domainswild";
+      flake = false;
+    };
   };
 
   outputs =

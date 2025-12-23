@@ -137,6 +137,18 @@
         "type": "github"
       }
     },
+    "oisd": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-JJUj4VgeBLNBz6ZWx7c78baK7iUO19oVQLi0fiap8GI=",
+        "type": "file",
+        "url": "https://big.oisd.nl/domainswild"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://big.oisd.nl/domainswild"
+      }
+    },
     "root": {
       "inputs": {
         "blender-bin": "blender-bin",
@@ -144,7 +156,8 @@
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "nixos-facter-modules": "nixos-facter-modules",
-        "nixpkgs": "nixpkgs_3"
+        "nixpkgs": "nixpkgs_3",
+        "oisd": "oisd"
       }
     }
   },
