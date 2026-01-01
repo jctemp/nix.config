@@ -1,4 +1,4 @@
-{pkgs, inputs, ...}:
+{ pkgs, inputs, ... }:
 {
   # ===============================================================
   #       NETWORK MANAGER
@@ -71,7 +71,7 @@
       # ===============================================================
       timeout = 5000; # [5000, 10000] in ms
       keepalive = 30; # in seconds
-      lb_strategy = "wp2";  # weighted ping + latency
+      lb_strategy = "wp2"; # weighted ping + latency
       lb_estimator = true;
       # timeout_load_reduction = 0.75;
 
@@ -88,16 +88,18 @@
       # ===============================================================
       #       BLOCKLISTS
       # ===============================================================
-      blocked_names.blocked_names_file = let
-        blocklist_base = builtins.readFile inputs.oisd;
-        extraBlocklist = '''';
-        blocklist = pkgs.writeText "blocklist.txt" ''
-          ${extraBlocklist}
-          ${blocklist_base}
-        '';
-      in blocklist;
+      blocked_names.blocked_names_file =
+        let
+          blocklist_base = builtins.readFile inputs.oisd;
+          extraBlocklist = '''';
+          blocklist = pkgs.writeText "blocklist.txt" ''
+            ${extraBlocklist}
+            ${blocklist_base}
+          '';
+        in
+        blocklist;
       # blocked_ips.blocked_ips_file = "/etc/dnscrypt-proxy/blocked-ips.txt";
     };
-    
-  }; 
+
+  };
 }
