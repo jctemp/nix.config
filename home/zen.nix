@@ -4,12 +4,13 @@ let
 in
 {
   imports = [
-    ./modules/wayland.nix
     ./modules/applications.nix
+    ./modules/development.nix
     ./modules/editor.nix
-    ./modules/shell.nix
     ./modules/git.nix
     ./modules/gpg.nix
+    ./modules/shell.nix
+    ./modules/wayland.nix
   ];
 
   home = {

@@ -53,8 +53,6 @@ in
           "${mod}+d" = "exec ${pkgs.fuzzel}/bin/fuzzel";
           "${mod}+Shift+q" = "kill";
           "${mod}+Shift+Escape" = "exec ${pkgs.swaylock-effects}/bin/swaylock";
-          "${mod}+Shift+slash" =
-            "exec ${pkgs.ghostty}/bin/ghostty --class=floating-cheatsheet -e sh -c 'less -R ~/.config/sway/cheatsheet.txt'";
           "${mod}+Shift+e" = "exec ${pkgs.xfce.thunar}/bin/thunar";
 
           # Vim-like focus
@@ -223,8 +221,6 @@ in
     enableBashIntegration = true;
     settings.font-size = 12;
   };
-
-  xdg.configFile."sway/cheatsheet.txt".source = ./sway-cheatsheet.txt;
 
   home.packages = with pkgs; [
     wl-clipboard
