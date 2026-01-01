@@ -225,13 +225,10 @@ in
         padding: 0 0.75rem;
       }
 
-      #memory, #network, #bluetooth {
-        color: #ffffff;
+      #cpu, #pulseaudio, #memory, #network, #bluetooth {
+        color: #ededed;
       }
 
-      #cpu, #pulseaudio {
-        color: #000000;
-      }
     '';
   };
 
